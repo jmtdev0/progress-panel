@@ -1,0 +1,12 @@
+{
+  "name": "progress-panel",
+  "owner": { "name": "jmtdev0" },
+  "metadata": { "description": "Progress bars for what Claude is doing, in a side pane" },
+  "plugins": [
+    {
+      "name": "progress-panel",
+      "source": "./",
+      "description": "A side pane with progress bars for what Claude is doing, plus a skill that tells Claude to keep them updated"
+    }
+  ]
+}

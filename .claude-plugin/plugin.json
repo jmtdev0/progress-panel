@@ -1,0 +1,10 @@
+{
+  "name": "progress-panel",
+  "version": "0.1.0",
+  "description": "A side pane with progress bars for what Claude is doing, plus a skill that tells Claude to keep them updated",
+  "author": { "name": "jmtdev0" },
+  "homepage": "https://github.com/jmtdev0/progress-panel",
+  "repository": "https://github.com/jmtdev0/progress-panel",
+  "license": "MIT",
+  "types": "./types/index.d.ts"
+}
