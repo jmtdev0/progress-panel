@@ -1,6 +1,8 @@
 # Changelog
 
 ### 31/10/2026
+* The README shows how the pane looks, with two illustrations (dark theme while working, light theme once finished)
+  drawn with the mod's own bars, icons and texts.
 * First public version (0.1.0), published as a GitHub repository that is also a plugin marketplace.
 
 ### 30/10/2026

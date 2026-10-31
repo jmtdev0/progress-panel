@@ -6,6 +6,19 @@ for what Claude is doing, plus a skill that tells Claude to keep those bars up t
 Run the skill at the start of a task and Claude splits the work into steps, shows them as bars in the pane and moves
 them as each step starts, advances, waits or finishes.
 
+## How it looks
+
+<p align="center">
+  <img src="docs/images/pane-working.png" width="380"
+       alt="Progress pane in a dark theme while Claude works: an overall bar at 52%, two finished tasks, one at 60% with the note 12/20 components, an animated bar for a build, a pending task and the tool calls running now">
+  &nbsp;&nbsp;
+  <img src="docs/images/pane-finished.png" width="380"
+       alt="Progress pane in a light theme once Claude has stopped: waiting for you, four finished tasks, a failed test run at 85% and a review waiting on the person">
+</p>
+
+<sub>Illustrations, not screenshots: they are drawn with the same bars, icons and texts as the mod, and the colors
+follow your Claude Code theme. The task is a made-up example.</sub>
+
 ## What the pane shows
 
 - Whether Claude is **working** or **waiting for you**.
