@@ -79,3 +79,27 @@ test('an empty pane says how to fill it', async ($, on) => {
   expect(await ui.find({ type: 'Text', text: /Run the progress skill/ })).toBeDefined()
   await ui.unmount()
 })
+
+test('a reminder rides on a tool result when open tasks have not been updated for a while', async ($, on) => {
+  mock.clock(on, { now: 1_000_000 })
+  on('tool.register', () => ({ value: { tool: TOOL } }))
+  on('command.register', () => ({ value: { command: 'progress-pane' } }))
+  on('ui.open', () => ({ value: { isPlaced: true } }))
+  on('session.start', (_, e) => ({ cwd: e.cwd }))
+  on('tool.call', () => ({ result: {} }))
+
+  await $.session.start({ cwd: '/', surface: 'desktop', isInteractive: true })
+
+  // No board yet: no reminder, however many calls go by.
+  for (let i = 0; i < 8; i++) expect((await $.tool.call({ tool: 'Bash', command: 'ls' })).context).toBeUndefined()
+
+  await $.tool.call({ tool: TOOL, reset: true, tasks: [{ id: 'a', label: 'Work', status: 'running' }] })
+  const contexts: boolean[] = []
+  for (let i = 0; i < 6; i++) contexts.push(Boolean((await $.tool.call({ tool: 'Bash', command: 'ls' })).context))
+  expect(contexts).toEqual([false, false, false, false, false, true])
+  expect(String((await $.tool.call({ tool: 'Bash', command: 'ls' })).context ?? '')).toBe('')
+
+  // Updating the pane restarts the count, and a finished board needs no reminder.
+  await $.tool.call({ tool: TOOL, tasks: [{ id: 'a', status: 'done' }] })
+  for (let i = 0; i < 8; i++) expect((await $.tool.call({ tool: 'Bash', command: 'ls' })).context).toBeUndefined()
+})

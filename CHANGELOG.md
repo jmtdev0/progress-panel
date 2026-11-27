@@ -1,5 +1,10 @@
 # Changelog
 
+### Unreleased
+* The mod reminds Claude to update the pane: when the board has unfinished tasks and 6 other tool calls have gone by
+  without an update, the next tool result carries a short reminder that only the model reads.
+* The skill has a "Keep it current" section with the cadence to follow.
+
 ### 31/10/2026
 * The README shows how the pane looks, with two illustrations (dark theme while working, light theme once finished)
   drawn with the mod's own bars, icons and texts.

@@ -8,6 +8,11 @@ const PANE_TITLE = 'Progress'
 const TOOL_NAME = 'progress'
 const TOOL = `mcp__progress-panel__${TOOL_NAME}`
 const STATUSES: readonly TaskStatus[] = ['pending', 'running', 'waiting', 'done', 'failed']
+// After this many other tool calls without an update of the board, the next tool result carries a reminder.
+const NUDGE_EVERY = 6
+const NUDGE_TEXT =
+  'Progress pane: several tool calls have gone by since its last update. If a step started, finished, failed or ' +
+  'moved, call the progress tool now (one short call, only the tasks that changed); if nothing changed, ignore this.'
 
 // Change a tag when the shape of its value changes: an older value is then read as the initial one.
 const board = atom(
@@ -20,6 +25,7 @@ const live = atom({ plugin: 'progress-panel', key: 'live' } as const, [] as Live
 })
 const busy = atom({ plugin: 'progress-panel', key: 'busy' } as const, false)
 const tick = atom({ plugin: 'progress-panel', key: 'tick' } as const, 0)
+const sinceUpdate = atom({ plugin: 'progress-panel', key: 'sinceUpdate' } as const, 0)
 
 const TOOL_DESCRIPTION = [
   'Updates the Progress side pane the person watches while you work.',
@@ -222,6 +228,7 @@ export const register: Register = on => {
 
       return { title: input.title ?? (input.reset ? '' : current.title), tasks: [...byId.values()], updatedAt: now }
     })
+    await update($, sinceUpdate, () => 0)
     void $.ui.open({ id: PANE, title: PANE_TITLE })
     const overall = overallPercent(next.tasks)
 
@@ -241,7 +248,17 @@ export const register: Register = on => {
     }
     await update($, live, list => [...list.filter(one => one.id !== call.id), call].slice(-20))
     try {
-      return await next(e)
+      const result = await next(e)
+      if (!('result' in result) || result.result === undefined) return result
+      // Count the call and, when the board has unfinished tasks that have not been touched for a while, remind
+      // the model (it reads the reminder after the result; the person does not see it).
+      const count = await update($, sinceUpdate, n => (n ?? 0) + 1)
+      const { tasks } = await read($, board)
+      const hasOpenTasks = tasks.some(t => t.status === 'running' || t.status === 'waiting' || t.status === 'pending')
+      if (!hasOpenTasks || count < NUDGE_EVERY) return result
+      await update($, sinceUpdate, () => 0)
+
+      return { ...result, context: [...(result.context ?? []), NUDGE_TEXT] }
     } finally {
       await update($, live, list => list.filter(one => one.id !== call.id))
     }

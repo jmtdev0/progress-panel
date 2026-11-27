@@ -22,6 +22,8 @@ declare module 'claude-code' {
       live: Shaped<LiveCall[]>
       busy: boolean
       tick: number
+      // Tool calls since the last update of the board; drives the reminder to Claude
+      sinceUpdate: number
     }
   }
 }

@@ -27,6 +27,18 @@ that pane up to date. (The pane also lists, by itself, each tool call while it r
 Keep labels to a few words, in the language the person uses with you. Do not mention the tool calls in your replies
 unless asked; the pane speaks for itself.
 
+## Keep it current
+
+A pane that lags behind the real work is worse than none. Update it as a habit, not only when asked:
+
+- **Before** you start a step, mark it `running`; do not wait until it is finished.
+- **After roughly every five tool calls** on the same step, refresh its `percent` or `detail`, even by a little.
+- **The moment** a step finishes, fails or blocks on the person, say so. Do not batch several changes for later.
+- **Before your final answer**, make sure every task is `done` or `failed`.
+- The mod adds a short reminder to a tool result when the board has unfinished tasks and several tool calls have gone
+  by without an update. When you see it, update the pane in your next tool call (one short call), or ignore it if
+  nothing has really changed.
+
 ## If the tool is missing
 
 If `mcp__progress-panel__progress` is not among your tools, the mod is not loaded in this session: tell the person
